@@ -1,0 +1,354 @@
+/* styles.css */
+
+/* Reset y variables */
+:root {
+    --primary-color: #2b3374;
+    --secondary-color: #d63031;
+    --text-color: #333;
+    --border-color: #e0e0e0;
+    --background-color: rgba(255, 255, 255, 1);
+}
+
+/* Container principal */
+.container {
+    position: relative;
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Tarjeta de autenticación */
+.auth-card {
+    width: 100%;
+    background-color: var(--background-color);
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    transition: opacity 0.3s ease;
+}
+
+/* Header de la tarjeta */
+.auth-header {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.auth-header h1 {
+    color: var(--primary-color);
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.auth-header p {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Sección del formulario */
+.auth-form {
+    width: 100%;
+}
+
+.auth-form h2 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+/* Campos del formulario */
+.form-field {
+    margin-bottom: 12px;
+}
+
+.form-field label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form-field input:not([type="checkbox"]) {
+    width: 100%;
+    padding: 6px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+/* Campo de contraseña */
+.password-input {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* Checkbox personalizado */
+.checkbox-field {
+    padding: 0;
+    margin: 20px 0;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.checkbox-text {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Botón de submit */
+.btn-submit {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* Enlaces y texto de registro */
+.text-center {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.text-center span {
+    color: #666;
+    font-size: 14px;
+}
+
+.text-center a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.text-center a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .auth-card {
+        padding: 25px 30px;
+    }
+}
+
+.login-page {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: url('fondo-login-page.webp') center/cover no-repeat fixed;
+    position: relative;
+}
+
+.login-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(1px);
+}
+
+.form-links {
+    text-align: center;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-links a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.form-links a:hover {
+    color: var(--secondary-color);
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .auth-card {
+        padding: 20px;
+    }
+}
+
+#registro-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 450px;
+}
+
+/* Animación para el cambio entre formularios */
+.fade-enter {
+    opacity: 0;
+}
+
+.fade-enter-active {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.fade-exit {
+    opacity: 1;
+}
+
+.fade-exit-active {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Ajustes específicos para el formulario de registro */
+#registro-form .form-field {
+    margin-bottom: 12px;
+}
+
+#registro-form .auth-header {
+    margin-bottom: 15px;
+}
+
+#registro-form .auth-form h2 {
+    margin-bottom: 15px;
+}
+
+#registro-form input:not([type="checkbox"]) {
+    padding: 6px 12px;
+}
+
+#registro-form .form-links {
+    margin-top: 12px;
+}
+
+#registro-form .btn-submit {
+    padding: 10px;
+}
+
+/* Ajuste general para ambos formularios */
+.auth-card {
+    padding: 20px;
+}
+
+/* Estilos para el Dashboard y Navegación */
+.navbar {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    padding: 1rem 2rem;
+}
+
+.navbar-brand {
+    color: white;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    color: white !important;
+    margin: 0 10px;
+    transition: opacity 0.3s ease;
+}
+
+.nav-link:hover {
+    opacity: 0.8;
+}
+
+.nav-link.active {
+    font-weight: bold;
+    border-bottom: 2px solid white;
+}
+
+/* Estilos para el contenido del dashboard */
+.dashboard-card {
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    background-color: var(--background-color);
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.dashboard-title {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-btn {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    padding: 0.5rem 2rem;
+    color: white;
+    border-radius: 8px;
+    transition: opacity 0.3s ease;
+}
+
+.dashboard-btn:hover {
+    opacity: 0.9;
+}
+
+/* Estilos para los formularios del dashboard */
+.dashboard-form-control {
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    padding: 6px 12px;
+}
+
+.dashboard-form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(43, 51, 116, 0.25);
+}
