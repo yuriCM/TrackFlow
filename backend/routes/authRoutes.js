@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const pool = require('../db');
+const jwt = require('jsonwebtoken');
 
 router.post('/register', async (req, res) => {
     try {
@@ -30,9 +31,17 @@ router.post('/register', async (req, res) => {
 
         console.log('Usuario creado:', newUser.rows[0]);
 
+        // Al generar el token
+        const token = jwt.sign(
+            { id: newUser.rows[0].id, email: newUser.rows[0].email },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' } // Aumentar el tiempo de expiración
+        );
+
         res.json({
             message: 'Usuario registrado exitosamente',
-            user: newUser.rows[0]
+            user: newUser.rows[0],
+            token: token
         });
 
     } catch (error) {
@@ -80,9 +89,17 @@ router.post('/login', async (req, res) => {
 
         console.log('Login exitoso para:', userResponse);
 
+        // Al generar el token
+        const token = jwt.sign(
+            { id: user.id, email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' } // Aumentar el tiempo de expiración
+        );
+
         res.json({
             message: 'Login exitoso',
-            user: userResponse
+            user: userResponse,
+            token: token
         });
 
     } catch (error) {

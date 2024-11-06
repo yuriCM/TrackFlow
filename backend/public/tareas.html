@@ -14,10 +14,29 @@
 <body>
     <!-- Agregar verificación de autenticación -->
     <script>
-        // Agregar al inicio del body
+        // Verificación de autenticación al inicio
         if (!localStorage.getItem('token')) {
             window.location.href = '/index.html';
         }
+
+        // Verificar token con el servidor
+        fetch('/api/verify-token', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Token inválido');
+            }
+            return response.json();
+        })
+        .catch(error => {
+            console.error('Error de autenticación:', error);
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/index.html';
+        });
     </script>
 
     <!-- Agregar mensaje de carga/error -->
@@ -38,53 +57,105 @@
         </div>
     </nav>
 
-    <!-- Contenido principal -->
-    <div class="container mt-4">
-        <div class="dashboard-card">
-            <div class="card-body">
-                <h2 class="dashboard-title">Registrar Nueva Tarea</h2>
-                <p class="text-center text-muted">Complete los detalles de la nueva tarea a realizar</p>
-
-                <form id="nuevaTareaForm">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="tituloTarea" class="form-label">Título de la Tarea</label>
-                            <select class="form-select" id="tituloTarea" required>
-                                <option value="">Seleccione una tarea</option>
-                                <!-- Opciones se cargarán dinámicamente -->
-                            </select>
+    <!-- Contenedor principal con clase para centrado -->
+    <div class="container-fluid mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="forms-container"> <!-- Nuevo contenedor para los formularios -->
+                    <!-- Primera Sección: Registrar Tareas Realizadas -->
+                    <div class="dashboard-card" id="firstForm">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div class="text-center w-100">
+                                <h2 class="dashboard-title">Registrar Nueva Tarea</h2>
+                                <p class="text-muted mb-0">Complete los detalles de la nueva tarea a realizar</p>
+                            </div>
+                            <button class="btn btn-link" id="toggleForm">
+                                <i class="bi bi-plus-circle-fill fs-3"></i>
+                            </button>
                         </div>
-                        <div class="col-md-6">
-                            <label for="maquina" class="form-label">Máquina</label>
-                            <select class="form-select" id="maquina" required>
-                                <option value="">Seleccione una máquina</option>
-                                <!-- Opciones se cargarán dinámicamente -->
-                            </select>
+                        
+                        <!-- Primer formulario -->
+                        <div class="card-body">
+                            <form id="registroTareasForm" class="task-form">
+                                <div class="row align-items-end g-3">
+                                    <!-- Máquina (ligeramente reducida) -->
+                                    <div class="col-md-2">
+                                        <label for="maquina" class="form-label">Máquina</label>
+                                        <select class="form-select" id="maquina" required>
+                                            <option value="">Seleccione</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Lista de Tareas (ampliada) -->
+                                    <div class="col-md-4">
+                                        <label for="listaTareas" class="form-label">Lista de Tareas</label>
+                                        <select class="form-select" id="listaTareas" required>
+                                            <option value="">Seleccione una tarea</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Motivo (reducido) -->
+                                    <div class="col-md-2">
+                                        <label for="motivo" class="form-label">Motivo</label>
+                                        <select class="form-select" id="motivo" required>
+                                            <option value="" disabled selected>Seleccione</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Fecha (reducida) -->
+                                    <div class="col-md-2">
+                                        <label for="fecha" class="form-label">Fecha</label>
+                                        <input type="date" class="form-control" id="fecha" required>
+                                    </div>
+
+                                    <!-- Botón Realizado (reducido) -->
+                                    <div class="col-md-2">
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="bi bi-check-circle"></i> Realizado
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
 
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="fechaEjecucion" class="form-label">Fecha de Ejecución</label>
-                            <input type="date" class="form-control" id="fechaEjecucion" required>
+                    <!-- Segunda Sección: Formulario para Agregar Nueva Tarea -->
+                    <div class="dashboard-card mt-4" id="secondForm" style="display: none;">
+                        <div class="card-header">
+                            <h2 class="dashboard-title">Agregar nueva tarea</h2>
                         </div>
-                        <div class="col-md-6 d-flex align-items-end">
-                            <button type="button" class="btn btn-primary" id="btnRealizado">Realizado</button>
+                        <div class="card-body">
+                            <form id="formularioAdicional" class="task-form">
+                                <div class="row align-items-end g-3">
+                                    <!-- Máquina -->
+                                    <div class="col-md-3">
+                                        <label for="maquinaNuevaTarea" class="form-label">Máquina</label>
+                                        <select class="form-select" id="maquinaNuevaTarea" required>
+                                            <option value="">Seleccione</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Nueva Tarea -->
+                                    <div class="col-md-6">
+                                        <label for="nombreNuevaTarea" class="form-label">Nueva Tarea</label>
+                                        <input type="text" class="form-control" id="nombreNuevaTarea" 
+                                               placeholder="Ingrese el nombre de la nueva tarea" required>
+                                    </div>
+
+                                    <!-- Botones de acción -->
+                                    <div class="col-md-3 text-end">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-plus-circle"></i> Agregar
+                                        </button>
+                                        <button type="button" class="btn btn-danger ms-2" onclick="limpiarFormularioNuevaTarea()">
+                                            <i class="bi bi-trash"></i> Eliminar
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="descripcionTarea" class="form-label">Nueva Tarea</label>
-                        <textarea class="form-control" id="descripcionTarea" rows="3" placeholder="Escriba la nueva tarea aquí"></textarea>
-                    </div>
-
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary" id="submitBtn">
-                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                            Agregar Tarea
-                        </button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>

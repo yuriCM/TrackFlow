@@ -8,6 +8,8 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const pool = require('./db');
+const maquinasRoutes = require('./routes/maquinas');
+const tareasRoutes = require('./routes/tareas');
 
 const app = express();
 
@@ -15,6 +17,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Agregar las rutas de máquinas
+app.use('/', maquinasRoutes);
+
+// Agregar las rutas de tareas
+app.use('/', tareasRoutes);
 
 // Prueba de conexión a la base de datos
 pool.connect()
@@ -27,6 +35,14 @@ pool.connect()
 // Rutas básicas
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Importar middleware de autenticación
+const authenticateToken = require('./middleware/authMiddleware');
+
+// Agregar ruta de verificación de token antes de la ruta catch-all
+app.get('/api/verify-token', authenticateToken, (req, res) => {
+    res.json({ valid: true, user: req.user });
 });
 
 // Importar y usar las rutas de autenticación

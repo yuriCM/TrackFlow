@@ -50,11 +50,17 @@ document.addEventListener('DOMContentLoaded', function() {
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            console.log('Formulario de login enviado');
 
             try {
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
+
+                // Mostrar overlay de transición
+                const overlay = document.createElement('div');
+                overlay.className = 'transition-overlay';
+                overlay.innerHTML = '<span class="loader"></span>';
+                document.body.appendChild(overlay);
+                overlay.style.display = 'flex';
 
                 const response = await fetch('/api/auth/login', {
                     method: 'POST',
@@ -65,24 +71,37 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
 
                 const data = await response.json();
-                console.log('Respuesta:', data);
 
                 if (!response.ok) {
                     throw new Error(data.error || 'Error en el login');
                 }
 
-                // Guardar datos del usuario en localStorage
+                // Guardar datos
+                localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
                 
-                // Mostrar mensaje de éxito
-                alert('Login exitoso. Redirigiendo...');
+                // Animación de salida
+                document.body.classList.add('fade-out');
                 
-                // Redirigir a tareas.html en lugar de dashboard.html
-                window.location.href = '/tareas.html';
+                // Redirección con delay para la animación
+                setTimeout(() => {
+                    window.location.href = '/tareas.html';
+                }, 300);
 
             } catch (error) {
                 console.error('Error:', error);
-                alert('Error en el login: ' + error.message);
+                // Remover overlay
+                overlay.remove();
+                
+                // Mostrar error
+                const errorAlert = document.createElement('div');
+                errorAlert.className = 'alert alert-danger fade-in';
+                errorAlert.textContent = 'Error en el login: ' + error.message;
+                loginForm.insertBefore(errorAlert, loginForm.firstChild);
+                
+                setTimeout(() => {
+                    errorAlert.remove();
+                }, 3000);
             }
         });
     }
