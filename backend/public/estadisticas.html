@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackFlow - Estadísticas</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">TrackFlow</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="tareas.html">Tareas</a>
+                <a class="nav-link" href="historial.html">Historial</a>
+                <a class="nav-link active" href="estadisticas.html">Estadística</a>
+                <a class="nav-link" href="#">Inventario</a>
+                <a class="nav-link" href="#" id="cerrarSesion">Cerrar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="dashboard-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h2 class="dashboard-title">Estadísticas y Ciclo de Vida de Repuestos</h2>
+                        <div class="machine-filters">
+                            <button class="btn btn-outline-primary btn-sm active">Todas</button>
+                            <button class="btn btn-outline-primary btn-sm">PA-1</button>
+                            <button class="btn btn-outline-primary btn-sm">PI-1</button>
+                            <button class="btn btn-outline-primary btn-sm">PI-7</button>
+                            <button class="btn btn-outline-primary btn-sm">PI-8</button>
+                            <button class="btn btn-outline-primary btn-sm">PI-9</button>
+                            <button class="btn btn-outline-primary btn-sm">PF-3</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Alertas de Mantenimiento -->
+                    <div class="alert alert-warning mt-3">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <strong>Alertas de Mantenimiento Preventivo</strong>
+                        <p class="mb-0">Se recomienda programar el reemplazo de los siguientes componentes en los próximos 30 días:</p>
+                    </div>
+
+                    <!-- Tabla de Componentes Críticos -->
+                    <div class="table-responsive mt-3">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Máquina</th>
+                                    <th>Componente</th>
+                                    <th>Instalación</th>
+                                    <th>Vida Útil Esperada</th>
+                                    <th>Tiempo Restante</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="componentesCriticos">
+                                <!-- Se llenará dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Métricas -->
+                    <div class="row mt-4">
+                        <div class="col-md-3">
+                            <div class="metric-card">
+                                <h3>Tareas Completadas</h3>
+                                <div class="metric-value">156</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="metric-card">
+                                <h3>Mantenimientos Pendientes</h3>
+                                <div class="metric-value">8</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="metric-card">
+                                <h3>Tiempo Promedio</h3>
+                                <div class="metric-value">2.5h</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="metric-card">
+                                <h3>Eficiencia</h3>
+                                <div class="metric-value">95%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="estadisticas.js"></script>
+</body>
+</html> 

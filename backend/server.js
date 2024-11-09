@@ -10,6 +10,7 @@ const path = require('path');
 const pool = require('./db');
 const maquinasRoutes = require('./routes/maquinas');
 const tareasRoutes = require('./routes/tareas');
+const estadisticasRoutes = require('./routes/estadisticasRoutes');
 
 const app = express();
 
@@ -23,6 +24,9 @@ app.use('/', maquinasRoutes);
 
 // Agregar las rutas de tareas
 app.use('/', tareasRoutes);
+
+// Agregar las rutas de estadísticas
+app.use('/', estadisticasRoutes);
 
 // Prueba de conexión a la base de datos
 pool.connect()

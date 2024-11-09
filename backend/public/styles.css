@@ -844,3 +844,66 @@ body {
     transform: translateY(-1px);
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+
+/* Estilos para la página de estadísticas */
+.metric-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.metric-card h3 {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.metric-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.estado-normal {
+    color: #28a745;
+    font-weight: 500;
+}
+
+.estado-programar-cambio {
+    color: #ffc107;
+    font-weight: 500;
+}
+
+.estado-critico {
+    color: #dc3545;
+    font-weight: 500;
+}
+
+.machine-filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.machine-filters button {
+    font-size: 0.875rem;
+    padding: 4px 12px;
+}
+
+.machine-filters button.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.alert {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.alert i {
+    font-size: 1.2rem;
+}
