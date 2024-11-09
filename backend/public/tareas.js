@@ -112,6 +112,163 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Cargar los motivos al iniciar la página
     cargarMotivos();
+
+    // Agregar el event listener para el formulario
+    document.getElementById('registroTareasForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        // Obtener los valores del formulario
+        const maquina_id = document.getElementById('maquina').value;
+        const tarea_id = document.getElementById('listaTareas').value;
+        const motivo_id = document.getElementById('motivo').value;
+        const fecha = document.getElementById('fecha').value;
+
+        // Validar que todos los campos estén completos
+        if (!maquina_id || !tarea_id || !motivo_id || !fecha) {
+            mostrarError('Por favor complete todos los campos');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/tareas-realizadas', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({
+                    maquina_id,
+                    tarea_id,
+                    motivo_id,
+                    fecha
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al registrar la tarea');
+            }
+
+            const data = await response.json();
+            
+            // Mostrar mensaje de éxito
+            mostrarExito('Tarea registrada exitosamente');
+            
+            // Limpiar el formulario
+            this.reset();
+            
+            // Opcional: Recargar los selects
+            cargarMaquinas();
+            document.getElementById('listaTareas').innerHTML = '<option value="">Seleccione una tarea</option>';
+            document.getElementById('motivo').value = '';
+
+        } catch (error) {
+            console.error('Error:', error);
+            mostrarError('Error al registrar la tarea');
+        }
+    });
+
+    // Agregar función para mostrar mensajes de éxito
+    function mostrarExito(mensaje) {
+        const successAlert = document.getElementById('successAlert');
+        successAlert.textContent = mensaje;
+        successAlert.classList.remove('d-none');
+        setTimeout(() => {
+            successAlert.classList.add('d-none');
+        }, 3000);
+    }
+
+    // Agregar el event listener para el formulario de nueva tarea
+    document.getElementById('formularioAdicional').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        // Obtener los valores del formulario
+        const maquina_id = document.getElementById('maquinaNuevaTarea').value;
+        const nombre_tarea = document.getElementById('nombreNuevaTarea').value;
+
+        // Validar campos
+        if (!maquina_id || !nombre_tarea) {
+            mostrarError('Por favor complete todos los campos');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/nueva-tarea', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({
+                    maquina_id,
+                    nombre_tarea
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al crear la tarea');
+            }
+
+            const data = await response.json();
+            
+            // Mostrar mensaje de éxito
+            mostrarExito('Tarea creada exitosamente');
+            
+            // Limpiar el formulario
+            limpiarFormularioNuevaTarea();
+            
+            // Opcional: Si la máquina seleccionada en el primer formulario es la misma,
+            // actualizar la lista de tareas
+            const maquinaSeleccionada = document.getElementById('maquina').value;
+            if (maquinaSeleccionada === maquina_id) {
+                await cargarTareasParaMaquina();
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+            mostrarError('Error al crear la tarea');
+        }
+    });
+
+    // Actualizar la función limpiarFormularioNuevaTarea
+    function limpiarFormularioNuevaTarea() {
+        document.getElementById('maquinaNuevaTarea').value = '';
+        document.getElementById('nombreNuevaTarea').value = '';
+    }
+
+    // Función para cargar las últimas tareas cuando se selecciona una máquina
+    async function cargarUltimasTareas() {
+        try {
+            const maquinaId = document.getElementById('maquinaNuevaTarea').value;
+            if (!maquinaId) return;
+
+            const response = await fetch(`/api/ultimas-tareas/${maquinaId}`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al cargar últimas tareas');
+            }
+
+            const tareas = await response.json();
+            const datalist = document.getElementById('ultimasTareas');
+            datalist.innerHTML = ''; // Limpiar lista actual
+
+            // Agregar las últimas tareas al datalist
+            tareas.forEach(tarea => {
+                const option = document.createElement('option');
+                option.value = tarea.nombre_tarea;
+                datalist.appendChild(option);
+            });
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    // Agregar el evento para cargar las últimas tareas cuando se selecciona una máquina
+    document.getElementById('maquinaNuevaTarea').addEventListener('change', cargarUltimasTareas);
 });
 
 // Función para cargar las máquinas desde la base de datos
@@ -161,7 +318,7 @@ function mostrarError(mensaje) {
 async function cargarTareasParaMaquina() {
     try {
         const maquinaId = document.getElementById('maquina').value;
-        if (!maquinaId) return; // Si no hay máquina seleccionada, no hacer nada
+        if (!maquinaId) return;
 
         const response = await fetch(`/api/tareas/${maquinaId}`, {
             headers: {
@@ -177,7 +334,7 @@ async function cargarTareasParaMaquina() {
         const selectTareas = document.getElementById('listaTareas');
         
         // Limpiar y agregar opción por defecto
-        selectTareas.innerHTML = '<option value="" disabled selected>Seleccione</option>';
+        selectTareas.innerHTML = '<option value="">Seleccione una tarea</option>';
         
         // Agregar las tareas
         tareas.forEach(tarea => {
@@ -228,5 +385,58 @@ async function cargarMaquinasEnSelect(selectElement) {
     } catch (error) {
         console.error('Error:', error);
         mostrarError('Error al cargar las máquinas');
+    }
+}
+
+// Mover esta función fuera del DOMContentLoaded
+async function eliminarTarea() {
+    try {
+        // Obtener valores del formulario de nueva tarea
+        const maquinaId = document.getElementById('maquinaNuevaTarea').value;
+        const nombreTarea = document.getElementById('nombreNuevaTarea').value.trim();
+
+        // Validar campos
+        if (!maquinaId || !nombreTarea) {
+            alert('Por favor seleccione una máquina y escriba el nombre de la tarea');
+            return;
+        }
+
+        // Confirmar eliminación
+        if (!confirm('¿Está seguro de que desea eliminar esta tarea?')) {
+            return;
+        }
+
+        // Realizar la eliminación
+        const response = await fetch('/api/tareas/eliminar', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({
+                maquina_id: maquinaId,
+                nombre_tarea: nombreTarea
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al eliminar la tarea');
+        }
+
+        alert('Tarea eliminada exitosamente');
+        
+        // Limpiar el formulario
+        document.getElementById('maquinaNuevaTarea').value = '';
+        document.getElementById('nombreNuevaTarea').value = '';
+
+        // Actualizar la lista de tareas
+        const maquinaSeleccionada = document.getElementById('maquina').value;
+        if (maquinaSeleccionada === maquinaId) {
+            await cargarTareasParaMaquina();
+        }
+
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al eliminar la tarea');
     }
 } 

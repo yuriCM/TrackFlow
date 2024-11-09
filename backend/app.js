@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
 const maquinasRouter = require('./routes/maquinas');
+const historialRouter = require('./routes/historialRoutes');
 
 // Cargar variables de entorno
 dotenv.config();
@@ -78,6 +79,12 @@ app.post('/api/auth/login', async (req, res) => {
 
 // Rutas de máquinas
 app.use('/', maquinasRouter);
+
+// Rutas de historial
+app.use('/api', historialRouter);
+
+// Rutas de tareas
+app.use(require('./routes/tareas'));
 
 // Mantener el código existente para el manejo del frontend
 document.addEventListener('DOMContentLoaded', function() {

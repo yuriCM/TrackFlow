@@ -48,8 +48,8 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="#">TrackFlow</a>
             <div class="navbar-nav ms-auto">
-                <a class="nav-link active" href="#">Tareas</a>
-                <a class="nav-link" href="#">Historial</a>
+                <a class="nav-link active" href="tareas.html">Tareas</a>
+                <a class="nav-link" href="historial.html">Historial</a>
                 <a class="nav-link" href="#">Estadística</a>
                 <a class="nav-link" href="#">Inventario</a>
                 <a class="nav-link" href="#" id="cerrarSesion">Cerrar Sesión</a>
@@ -138,8 +138,12 @@
                                     <!-- Nueva Tarea -->
                                     <div class="col-md-6">
                                         <label for="nombreNuevaTarea" class="form-label">Nueva Tarea</label>
-                                        <input type="text" class="form-control" id="nombreNuevaTarea" 
-                                               placeholder="Ingrese el nombre de la nueva tarea" required>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="nombreNuevaTarea" 
+                                               autocomplete="off"
+                                               placeholder="Ingrese el nombre de la nueva tarea" 
+                                               required>
                                     </div>
 
                                     <!-- Botones de acción -->
@@ -147,7 +151,7 @@
                                         <button type="submit" class="btn btn-primary">
                                             <i class="bi bi-plus-circle"></i> Agregar
                                         </button>
-                                        <button type="button" class="btn btn-danger ms-2" onclick="limpiarFormularioNuevaTarea()">
+                                        <button type="button" class="btn btn-danger ms-2" onclick="eliminarTarea()">
                                             <i class="bi bi-trash"></i> Eliminar
                                         </button>
                                     </div>

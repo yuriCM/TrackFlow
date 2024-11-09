@@ -510,3 +510,231 @@ body {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     transition: box-shadow 0.3s ease;
 }
+
+/* Estilos para la página de historial */
+.dashboard-card {
+    background-color: var(--background-color);
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    padding: 1.5rem;
+}
+
+.dashboard-title {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+/* Estilos para los filtros de máquinas */
+.machine-filters {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.machine-filters button {
+    font-size: 0.875rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.machine-filters button.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Estilos para la tabla */
+.table {
+    margin-bottom: 0;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    color: var(--primary-color);
+    font-weight: 600;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table td {
+    vertical-align: middle;
+    padding: 0.75rem;
+}
+
+/* Badges para los motivos */
+.badge {
+    padding: 0.5em 0.75em;
+    font-weight: 500;
+    border-radius: 20px;
+}
+
+/* Estilos para la paginación */
+.pagination {
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+}
+
+.pagination .page-link {
+    color: var(--primary-color);
+    border: 1px solid #dee2e6;
+    padding: 0.375rem 0.75rem;
+    margin: 0 0.25rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    background-color: #fff;
+    border-color: #dee2e6;
+}
+
+/* Responsive table */
+.table-responsive {
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+    .machine-filters {
+        margin-top: 1rem;
+        justify-content: center;
+    }
+
+    .card-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .dashboard-title {
+        margin-bottom: 1rem;
+    }
+
+    .table td, .table th {
+        min-width: 120px;
+    }
+}
+
+/* Animaciones */
+.dashboard-card {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hover effects */
+.table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+    transition: background-color 0.3s ease;
+}
+
+.machine-filters button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.page-link:hover {
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    color: var(--primary-color);
+}
+
+/* Ajustes para el segundo formulario */
+.dashboard-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+}
+
+.dashboard-card .card-header {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.dashboard-card .card-body {
+    padding: 15px;
+}
+
+.dashboard-title {
+    font-size: 1.2rem;
+    margin: 0;
+    color: var(--primary-color);
+}
+
+/* Ajustar el espaciado entre elementos del formulario */
+.task-form .row {
+    margin-bottom: 10px;
+}
+
+.form-label {
+    margin-bottom: 3px;
+}
+
+/* Ajustar el margen superior del segundo formulario */
+#secondForm {
+    margin-top: 15px;
+}
+
+/* Ajustar el espaciado entre los formularios */
+.forms-container {
+    gap: 15px;
+}
+
+/* Ajustes específicos solo para el segundo formulario */
+#secondForm {
+    margin-top: 10px;
+}
+
+#secondForm .card-header {
+    padding: 5px 15px;
+}
+
+#secondForm .dashboard-title {
+    font-size: 1.1rem;
+    margin: 5px 0;
+}
+
+#secondForm .card-body {
+    padding: 10px 15px;
+}
+
+#secondForm .form-label {
+    margin-bottom: 2px;
+    font-size: 0.9rem;
+}
+
+#secondForm .task-form .row {
+    margin-bottom: 5px;
+}
+
+#secondForm .form-control,
+#secondForm .form-select {
+    padding: 5px 10px;
+    height: auto;
+}
