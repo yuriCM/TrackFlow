@@ -738,3 +738,109 @@ body {
     padding: 5px 10px;
     height: auto;
 }
+
+/* Estilos específicos para la página de historial */
+.machine-filters {
+    display: flex;
+    gap: 10px;
+}
+
+.machine-filters .btn {
+    font-size: 0.875rem;
+    padding: 4px 12px;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.estado-completado {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+}
+
+/* Ajustes para la paginación */
+.pagination {
+    margin-bottom: 0;
+    margin-top: 20px;
+}
+
+.pagination .page-link {
+    padding: 5px 10px;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #2b3374;
+    border-color: #2b3374;
+}
+
+/* Estilos para los badges de motivos */
+.motivo-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.motivo-correctivo {
+    background-color: #f8d7da;  /* Rojo suave */
+    color: #721c24;
+}
+
+.motivo-predictivo {
+    background-color: #cce5ff;  /* Azul suave */
+    color: #004085;
+}
+
+.motivo-preventivo {
+    background-color: #d4edda;  /* Verde suave */
+    color: #155724;
+}
+
+.motivo-otro {
+    background-color: #e2e3e5;  /* Gris suave */
+    color: #383d41;
+}
+
+/* Estilos para la tabla de historial */
+.table {
+    margin-bottom: 0;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+/* Ajuste del padding en las celdas */
+.table th,
+.table td {
+    padding: 12px 15px;
+}
+
+/* Estilos para los botones de filtro */
+.machine-filters .btn {
+    margin: 0 5px;
+    transition: all 0.3s ease;
+}
+
+.machine-filters .btn.active {
+    background-color: #2b3374;
+    color: white;
+    border-color: #2b3374;
+}
+
+.machine-filters .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}

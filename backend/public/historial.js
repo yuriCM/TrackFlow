@@ -1,51 +1,14 @@
 let currentPage = 1;
 let currentMaquina = null;
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Verificar autenticación
-    const token = localStorage.getItem('token');
-    if (!token) {
-        window.location.href = 'index.html';
-        return;
-    }
-
-    // Cargar historial inicial
-    cargarHistorial(1);
-
-    // Configurar eventos de filtros de máquinas
-    document.querySelectorAll('.machine-filters button').forEach(button => {
-        button.addEventListener('click', () => {
-            const maquina = button.dataset.maquina;
-            document.querySelectorAll('.machine-filters button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            if (currentMaquina === maquina) {
-                currentMaquina = null;
-                button.classList.remove('active');
-            } else {
-                currentMaquina = maquina;
-                button.classList.add('active');
-            }
-            
-            currentPage = 1;
-            cargarHistorial(currentPage);
-        });
-    });
-
-    // Configurar evento de cerrar sesión
-    document.getElementById('cerrarSesion').addEventListener('click', (e) => {
-        e.preventDefault();
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        window.location.href = 'index.html';
-    });
-});
-
-async function cargarHistorial(page = 1) {
+async function cargarHistorial(page = 1, maquina = null) {
     try {
-        console.log('Intentando cargar historial...'); // Debug
-        const response = await fetch(`/api/historial?page=${page}`, {
+        let url = `/api/historial?page=${page}`;
+        if (maquina) {
+            url += `&maquina=${maquina}`;
+        }
+
+        const response = await fetch(url, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
@@ -56,13 +19,12 @@ async function cargarHistorial(page = 1) {
         }
 
         const data = await response.json();
-        console.log('Datos recibidos:', data); // Debug
         actualizarTabla(data.tareas);
         actualizarPaginacion(data.currentPage, data.totalPages);
-
+        actualizarBotonesFiltro(data.maquinaActual);
     } catch (error) {
         console.error('Error:', error);
-        alert('Error al cargar el historial: ' + error.message);
+        alert('Error al cargar el historial');
     }
 }
 
@@ -71,94 +33,34 @@ function actualizarTabla(tareas) {
     tabla.innerHTML = '';
 
     if (tareas.length === 0) {
-        tabla.innerHTML = `
-            <tr>
-                <td colspan="5" class="text-center">No hay registros para mostrar</td>
-            </tr>
-        `;
+        const fila = document.createElement('tr');
+        fila.innerHTML = '<td colspan="5" class="text-center">No hay tareas para mostrar</td>';
+        tabla.appendChild(fila);
         return;
     }
 
-    tareas.forEach(tarea => {
+    tareas.forEach(registro => {
         const fila = document.createElement('tr');
         fila.innerHTML = `
-            <td>${tarea.tarea_id}</td>
-            <td>${tarea.maquina_id}</td>
-            <td>${formatearFecha(tarea.fecha)}</td>
-            <td>${tarea.motivo_id}</td>
-            <td>${tarea.usuario_id}</td>
+            <td>${registro.nombre_tarea}</td>
+            <td>${registro.maquina}</td>
+            <td>${registro.fecha}</td>
+            <td><span class="motivo-badge ${getMotivoBadgeClass(registro.motivo)}">${registro.motivo}</span></td>
+            <td>${registro.realizado_por}</td>
         `;
         tabla.appendChild(fila);
     });
 }
 
-function actualizarPaginacion(currentPage, totalPages) {
-    const paginacion = document.getElementById('paginacion');
-    paginacion.innerHTML = '';
-
-    // Botón Anterior
-    const prevBtn = document.createElement('li');
-    prevBtn.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
-    prevBtn.innerHTML = `
-        <button class="page-link" ${currentPage === 1 ? 'disabled' : ''}>Anterior</button>
-    `;
-    if (currentPage > 1) {
-        prevBtn.onclick = () => cargarHistorial(currentPage - 1);
-    }
-    paginacion.appendChild(prevBtn);
-
-    // Páginas
-    for (let i = 1; i <= totalPages; i++) {
-        const pageItem = document.createElement('li');
-        pageItem.className = `page-item ${currentPage === i ? 'active' : ''}`;
-        pageItem.innerHTML = `<button class="page-link">${i}</button>`;
-        pageItem.onclick = () => cargarHistorial(i);
-        paginacion.appendChild(pageItem);
-    }
-
-    // Botón Siguiente
-    const nextBtn = document.createElement('li');
-    nextBtn.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
-    nextBtn.innerHTML = `
-        <button class="page-link" ${currentPage === totalPages ? 'disabled' : ''}>Siguiente</button>
-    `;
-    if (currentPage < totalPages) {
-        nextBtn.onclick = () => cargarHistorial(currentPage + 1);
-    }
-    paginacion.appendChild(nextBtn);
-}
-
-function formatearFecha(fecha) {
-    const options = { 
-        year: 'numeric', 
-        month: '2-digit', 
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-    };
-    return new Date(fecha).toLocaleString('es-ES', options);
-}
-
-function getBadgeClass(motivo) {
-    const motivoLower = motivo?.toLowerCase() || '';
-    if (motivoLower.includes('correctivo')) return 'bg-danger';
-    if (motivoLower.includes('preventivo')) return 'bg-success';
-    if (motivoLower.includes('predictivo')) return 'bg-warning';
-    return 'bg-secondary';
-} 
-
-
-// Inicializar eventos
-document.addEventListener('DOMContentLoaded', () => {
-    // Evento para cerrar sesión
-    document.getElementById('cerrarSesion').addEventListener('click', (e) => {
-        e.preventDefault();
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        window.location.href = 'index.html';
+function actualizarBotonesFiltro(maquinaActual) {
+    document.querySelectorAll('.machine-filters .btn').forEach(btn => {
+        const maquina = btn.textContent;
+        btn.classList.toggle('active', maquina === maquinaActual);
     });
+}
 
-    // Eventos para los botones de filtro
+// Inicializar eventos de filtro
+document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.machine-filters .btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const maquina = btn.textContent;
@@ -168,6 +70,46 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Cargar historial inicial
     cargarHistorial(1);
-}); 
+});
+
+function actualizarPaginacion(currentPage, totalPages) {
+    const paginacion = document.getElementById('paginacion');
+    paginacion.innerHTML = '';
+
+    // Botón anterior
+    const prevBtn = document.createElement('li');
+    prevBtn.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+    prevBtn.innerHTML = `<a class="page-link" href="#" ${currentPage === 1 ? 'tabindex="-1"' : ''}>Anterior</a>`;
+    prevBtn.onclick = () => currentPage > 1 && cargarHistorial(currentPage - 1);
+    paginacion.appendChild(prevBtn);
+
+    // Páginas
+    for (let i = 1; i <= totalPages; i++) {
+        const pageItem = document.createElement('li');
+        pageItem.className = `page-item ${currentPage === i ? 'active' : ''}`;
+        pageItem.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+        pageItem.onclick = () => cargarHistorial(i);
+        paginacion.appendChild(pageItem);
+    }
+
+    // Botón siguiente
+    const nextBtn = document.createElement('li');
+    nextBtn.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+    nextBtn.innerHTML = `<a class="page-link" href="#" ${currentPage === totalPages ? 'tabindex="-1"' : ''}>Siguiente</a>`;
+    nextBtn.onclick = () => currentPage < totalPages && cargarHistorial(currentPage + 1);
+    paginacion.appendChild(nextBtn);
+}
+
+function getMotivoBadgeClass(motivo) {
+    switch (motivo.toLowerCase()) {
+        case 'correctivo':
+            return 'motivo-correctivo';
+        case 'predictivo':
+            return 'motivo-predictivo';
+        case 'preventivo':
+            return 'motivo-preventivo';
+        default:
+            return 'motivo-otro';
+    }
+} 

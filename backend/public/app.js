@@ -110,6 +110,21 @@ document.addEventListener('DOMContentLoaded', function() {
     if (registroForm) {
         registroForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            const nombre = document.getElementById('reg-name').value.trim();
+            
+            // Validar formato de nombre y apellido
+            if (!nombre.includes(' ')) {
+                alert('Por favor ingrese su nombre y apellido separados por un espacio');
+                return;
+            }
+
+            const nombreParts = nombre.split(' ');
+            if (nombreParts.length > 2) {
+                alert('Por favor ingrese solo su nombre y primer apellido');
+                return;
+            }
+
             console.log('Formulario de registro enviado');
 
             try {

@@ -12,33 +12,6 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Agregar verificación de autenticación -->
-    <script>
-        // Verificación de autenticación al inicio
-        if (!localStorage.getItem('token')) {
-            window.location.href = '/index.html';
-        }
-
-        // Verificar token con el servidor
-        fetch('/api/verify-token', {
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Token inválido');
-            }
-            return response.json();
-        })
-        .catch(error => {
-            console.error('Error de autenticación:', error);
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.href = '/index.html';
-        });
-    </script>
-
     <!-- Barra de navegación -->
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
@@ -60,31 +33,29 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h2 class="dashboard-title">Historial de Tareas</h2>
                         <div class="machine-filters">
-                            <button class="btn btn-outline-primary btn-sm" data-maquina="PA-1">PA-1</button>
-                            <button class="btn btn-outline-primary btn-sm" data-maquina="PI-1">PI-1</button>
-                            <button class="btn btn-outline-primary btn-sm" data-maquina="PI-7">PI-7</button>
-                            <button class="btn btn-outline-primary btn-sm" data-maquina="PI-8">PI-8</button>
-                            <button class="btn btn-outline-primary btn-sm" data-maquina="PI-9">PI-9</button>
-                            <button class="btn btn-outline-primary btn-sm" data-maquina="PF-3">PF-3</button>
+                            <button class="btn btn-outline-primary btn-sm">PA-1</button>
+                            <button class="btn btn-outline-primary btn-sm">PI-1</button>
+                            <button class="btn btn-outline-primary btn-sm">PI-7</button>
+                            <button class="btn btn-outline-primary btn-sm">PI-8</button>
+                            <button class="btn btn-outline-primary btn-sm">PI-9</button>
+                            <button class="btn btn-outline-primary btn-sm">PF-3</button>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Tarea</th>
-                                        <th>Máquina</th>
-                                        <th>Fecha</th>
-                                        <th>Motivo</th>
-                                        <th>Realizado por</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="historialTabla">
-                                    <!-- Aquí se cargarán los datos dinámicamente -->
-                                </tbody>
-                            </table>
-                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre de la Tarea</th>
+                                    <th>Máquina</th>
+                                    <th>Fecha de Ejecución</th>
+                                    <th>Motivo</th>
+                                    <th>Realizado por</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historialTabla">
+                                <!-- Aquí se cargarán los datos dinámicamente -->
+                            </tbody>
+                        </table>
                         <nav aria-label="Paginación del historial">
                             <ul class="pagination justify-content-center" id="paginacion">
                                 <!-- La paginación se generará dinámicamente -->
