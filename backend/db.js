@@ -9,5 +9,10 @@ const pool = new Pool({
     port: process.env.DB_PORT
 });
 
+// Agregar listener para errores de conexión
+pool.on('error', (err) => {
+    console.error('Error inesperado en el pool de conexiones:', err);
+});
+
 module.exports = pool;
 

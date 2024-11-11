@@ -865,22 +865,6 @@ body {
     font-weight: bold;
     color: var(--primary-color);
 }
-
-.estado-normal {
-    color: #28a745;
-    font-weight: 500;
-}
-
-.estado-programar-cambio {
-    color: #ffc107;
-    font-weight: 500;
-}
-
-.estado-critico {
-    color: #dc3545;
-    font-weight: 500;
-}
-
 .machine-filters {
     display: flex;
     gap: 8px;
@@ -906,4 +890,27 @@ body {
 
 .alert i {
     font-size: 1.2rem;
+}
+
+.estado-normal {
+    color: #28a745; /* Verde */
+    font-weight: 600;
+}
+
+.estado-advertencia {
+    color: #dc3545; /* Rojo */
+    font-weight: 600;
+}
+
+/* Elimina todas las definiciones anteriores de .estado-normal y .estado-advertencia */
+
+/* Al final del archivo, después de línea 890 */
+.table td .estado-normal {
+    color: #28a745 !important; /* Verde */
+    font-weight: 600;
+}
+
+.table td .estado-advertencia {
+    color: #dc3545 !important; /* Rojo */
+    font-weight: 600;
 }
