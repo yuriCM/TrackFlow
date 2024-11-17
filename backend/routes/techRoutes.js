@@ -67,6 +67,63 @@ router.get('/estadisticas', authenticateToken, async (req, res) => {
   }
 });
 
+// Nueva ruta para Calendario
+router.get('/calendario', authenticateToken, async (req, res) => {
+  try {
+    // Obtener eventos del calendario (tareas programadas, mantenimientos, etc.)
+    const eventos = await pool.query(
+      `SELECT 
+          tr.id,
+          t.nombre_tarea,
+          m.nombre as maquina,
+          tr.fecha,
+          mc.nombre_motivo as motivo
+      FROM tareas_realizadas tr
+      LEFT JOIN lista_de_tareas t ON tr.tarea_id = t.id
+      LEFT JOIN maquinas m ON tr.maquina_id = m.id
+      LEFT JOIN motivo_cambio mc ON tr.motivo_id = mc.id
+      WHERE tr.usuario_id = $1
+      ORDER BY tr.fecha DESC`,
+      [req.user.id]
+    );
+
+    res.json({ 
+      eventos: eventos.rows,
+      message: 'Eventos del calendario obtenidos exitosamente'
+    });
+  } catch (error) {
+    console.error('Error al obtener eventos del calendario:', error.message);
+    res.status(500).json({ error: 'Error al obtener los eventos del calendario.' });
+  }
+});
+
+// Ruta para agregar evento al Calendario
+router.post('/calendario', authenticateToken, async (req, res) => {
+  const { titulo, fecha, descripcion, tipo_evento } = req.body;
+
+  if (!titulo || !fecha || !tipo_evento) {
+    return res.status(400).json({ error: 'Título, fecha y tipo de evento son requeridos.' });
+  }
+
+  try {
+    const resultado = await pool.query(
+      `INSERT INTO eventos_calendario 
+      (titulo, fecha, descripcion, tipo_evento, usuario_id) 
+      VALUES ($1, $2, $3, $4, $5) 
+      RETURNING *`,
+      [titulo, fecha, descripcion, tipo_evento, req.user.id]
+    );
+
+    res.status(201).json({
+      message: 'Evento agregado exitosamente',
+      evento: resultado.rows[0]
+    });
+  } catch (error) {
+    console.error('Error al agregar evento:', error.message);
+    res.status(500).json({ error: 'Error al agregar el evento al calendario.' });
+  }
+});
+
 // Ruta para Gestionar Inventario de Repuestos
 router.get('/inventario', authenticateToken, async (req, res) => {
   try {

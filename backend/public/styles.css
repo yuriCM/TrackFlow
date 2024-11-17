@@ -999,3 +999,81 @@ body {
 .pagination {
     margin-bottom: 15px; /* Margen inferior */
 }
+
+/* Estilos para el calendario */
+.calendar-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+}
+
+.calendar-legend {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+}
+
+.calendar-controls {
+    padding: 10px 0;
+}
+
+.calendar-title {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.calendar-grid table {
+    table-layout: fixed;
+}
+
+.calendar-grid th {
+    text-align: center;
+    padding: 10px;
+    font-weight: 500;
+    color: #666;
+}
+
+.calendar-grid td {
+    height: 120px;
+    vertical-align: top;
+    padding: 5px;
+}
+
+.calendar-grid td.other-month {
+    background-color: #f8f9fa;
+    color: #aaa;
+}
+
+.calendar-grid td.today {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+/* Estilos para los eventos */
+.calendar-event {
+    margin: 2px 0;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    color: white;
+    cursor: pointer;
+}
+
+.event-preventivo { background-color: #28a745; }
+.event-correctivo { background-color: #dc3545; }
+.event-inspeccion { background-color: #007bff; }
+.event-calibracion { background-color: #ffc107; color: #000; }
