@@ -85,6 +85,17 @@ function actualizarTablaComponentes(componentes) {
             day: '2-digit'
         });
 
+        let estadoClase = '';
+        switch(comp.estado.toLowerCase()) {
+            case 'advertencia':
+                estadoClase = 'text-danger fw-bold';  // Texto rojo y negrita
+                break;
+            case 'normal':
+                estadoClase = 'text-success';
+                break;
+            // ... otros casos si los hay ...
+        }
+        
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${comp.maquina || 'N/A'}</td>
@@ -92,7 +103,7 @@ function actualizarTablaComponentes(componentes) {
             <td class="text-center">${fecha}</td>
             <td class="text-center">${comp.vidaUtil || '12 meses'}</td>
             <td class="text-center">${comp.tiempoRestante || 'Por calcular'}</td>
-            <td class="text-center"><span class="estado-${comp.estado.toLowerCase()}">${comp.estado}</span></td>
+            <td class="text-center ${estadoClase}">${comp.estado}</td>
         `;
         tbody.appendChild(tr);
     });
@@ -125,10 +136,16 @@ async function cargarMetricas(maquina = null) {
 
 function actualizarMetricas(metricas) {
     // Actualizar cada métrica en su respectiva tarjeta
-    document.querySelector('.metric-value:nth-child(1)').textContent = metricas.tareasCompletadas;
-    document.querySelector('.metric-value:nth-child(2)').textContent = metricas.mantenimientosPendientes;
-    document.querySelector('.metric-value:nth-child(3)').textContent = metricas.tiempoPromedio;
-    document.querySelector('.metric-value:nth-child(4)').textContent = metricas.eficiencia;
+    const metricCards = document.querySelectorAll('.metric-card .metric-value');
+    if (metricCards.length >= 4) {
+        metricCards[0].textContent = metricas.tareasCompletadas;
+        metricCards[1].textContent = metricas.mantenimientosPendientes;
+        metricCards[2].textContent = metricas.tiempoPromedio;
+        metricCards[3].textContent = metricas.eficiencia;
+    }
+    
+    // Para debugging
+    console.log('Métricas recibidas:', metricas);
 }
 
 function actualizarPaginacion(pagination) {
